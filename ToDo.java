@@ -8,16 +8,19 @@ import java.io.*;
 public class ToDo {
 
 	//List of ToDos
-	protected ArrayList<String> toDoList;
+	protected ArrayList<JCheckBox> toDoList;
 	static JTextField textField; 
-	static JTextArea toDoDisplay; 
+	static JPanel topPan;
+	static JPanel pan;
+	static JFrame frame;
 
 	//Constructor method 
 	ToDo() {
+		
+		toDoList = new ArrayList<JCheckBox>();
 		textField = new JTextField(20);
-		toDoDisplay = new JTextArea("To-Do List\n", 1,20); 
-
-		textField.setMaximumSize(new Dimension(300,1));
+		topPan = new JPanel();
+		pan = new JPanel();
 
 		//creates new folder to store to-do list 
 		new File("Saved To-Dos").mkdirs(); 
@@ -26,17 +29,12 @@ public class ToDo {
 		if (new File("Saved To-Dos/todos.ser").isFile()) {
 			try {
 
-				FileInputStream listIn = new FileInputStream("/Saved To-Dos/todos.ser");
+				FileInputStream listIn = new FileInputStream("Saved To-Dos/todos.ser");
 				ObjectInputStream in = new ObjectInputStream(listIn);
 				
-				toDoList = (ArrayList<String>) in.readObject();
+				toDoList = (ArrayList<JCheckBox>) in.readObject();
 				in.close();
 				listIn.close();
-
-				for (String i : toDoList) {
-					System.out.println(i);
-					toDoDisplay.append(i + "\n");					
-				}
 
 			} catch (IOException i) {
 				i.printStackTrace();
@@ -44,44 +42,55 @@ public class ToDo {
 			} catch (ClassNotFoundException c) {
 
 			}
-		} else { 
-			toDoList = new ArrayList<String>();
 		}
 	}
 
 	private void createGUI() {
 
-		//Create app window
-		JFrame frame = new JFrame("Frame");
+		frame = new JFrame("To-Do App");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		//Connects actionlistener to textfield so textfield executes code when text is entered
+		textField.setMaximumSize(new Dimension(300,50));
 		WriteToDoActionListener toDoText = new WriteToDoActionListener();
 		textField.addActionListener(toDoText);
 
-		//create new panel to add textfield, textarea, and other components. Sets layout to follow 
-		JPanel pan = new JPanel();
-		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS)); 
+		JLabel title = new JLabel("To-Dos");
 
-		pan.add(textField); 
-		pan.add(toDoDisplay);
-		frame.add(pan);
-		
-		frame.pack(); 
+
+		topPan.setLayout(new BoxLayout(topPan, BoxLayout.Y_AXIS));
+		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
+
+		pan.add(textField);
+		pan.add(new JLabel("To-Dos"));
+		topPan.add(pan);
+		topPan.add(Box.createVerticalGlue());
+
+		for (JCheckBox i : toDoList) {
+			pan.add(i);					
+		}
+
+		frame.add(topPan);
+		frame.pack();
 		frame.setVisible(true);
+
 	}
 
 	private class WriteToDoActionListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			toDoList.add(textField.getText());
-			toDoDisplay.append(textField.getText() + "\n");
+			toDoList.add(new JCheckBox(textField.getText()));
+			pan.add(new JCheckBox(textField.getText()));
 			textField.setText("");
+
+			//ensures new checkbox component is visible
+			frame.pack();
+			frame.setVisible(true);
+
 			
 			//Saves list of to-dos for later use	
 			try {
 
-				FileOutputStream listOut = new FileOutputStream(new File("/Saved To-Dos/todos.ser"));
+				FileOutputStream listOut = new FileOutputStream(new File("Saved To-Dos/todos.ser"));
 				ObjectOutputStream out = new ObjectOutputStream(listOut);
 				out.writeObject(toDoList);
 				out.close();
