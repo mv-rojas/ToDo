@@ -5,21 +5,19 @@ import java.util.*;
 import javax.swing.*;
 import java.io.*;
 
-public class ToDo {
+public class ToDoApp {
 
 	//List of ToDos
-	protected ArrayList<JCheckBox> toDoList;
+	protected ArrayList<String> toDoList;
 	static JTextField textField; 
-	static JPanel topPan;
 	static JPanel pan;
 	static JFrame frame;
 
 	//Constructor method 
-	ToDo() {
+	ToDoApp() {
 		
-		toDoList = new ArrayList<JCheckBox>();
+		toDoList = new ArrayList<String>();
 		textField = new JTextField(20);
-		topPan = new JPanel();
 		pan = new JPanel();
 
 		//creates new folder to store to-do list 
@@ -32,7 +30,7 @@ public class ToDo {
 				FileInputStream listIn = new FileInputStream("Saved To-Dos/todos.ser");
 				ObjectInputStream in = new ObjectInputStream(listIn);
 				
-				toDoList = (ArrayList<JCheckBox>) in.readObject();
+				toDoList = (ArrayList<String>) in.readObject();
 				in.close();
 				listIn.close();
 
@@ -56,7 +54,7 @@ public class ToDo {
 
 		JLabel title = new JLabel("To-Dos");
 
-
+		JPanel topPan = new JPanel();
 		topPan.setLayout(new BoxLayout(topPan, BoxLayout.Y_AXIS));
 		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
 
@@ -65,8 +63,8 @@ public class ToDo {
 		topPan.add(pan);
 		topPan.add(Box.createVerticalGlue());
 
-		for (JCheckBox i : toDoList) {
-			pan.add(i);					
+		for (String i : toDoList) {
+			pan.add(new ToDo(i));					
 		}
 
 		frame.add(topPan);
@@ -75,16 +73,47 @@ public class ToDo {
 
 	}
 
+	//This component displays individual to-dos and allows their modification
+	private class ToDo extends JPanel implements ActionListener {
+		private String toDoText;
+
+		ToDo(String text) {
+			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+
+			JButton deleteButton = new JButton("X");
+			deleteButton.addActionListener(this);
+
+			this.add(new JCheckBox(text));
+			this.add(deleteButton);
+		}
+
+		//removes to-do from general list and to-do GUI component
+		public void actionPerformed(ActionEvent e) {
+			toDoList.remove(toDoText);
+			pan.remove(this);
+
+			pan.revalidate();
+			pan.repaint();
+		}
+
+		public String getText() {
+			return toDoText;
+		}
+
+
+	}
+
+	//creates checkable to-do from text that is entered in textField
 	private class WriteToDoActionListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			toDoList.add(new JCheckBox(textField.getText()));
-			pan.add(new JCheckBox(textField.getText()));
+			toDoList.add(textField.getText());
+			pan.add(new ToDo(textField.getText()));
 			textField.setText("");
 
 			//ensures new checkbox component is visible
-			frame.pack();
-			frame.setVisible(true);
+			pan.revalidate();
+			pan.repaint();
 
 			
 			//Saves list of to-dos for later use	
@@ -99,7 +128,6 @@ public class ToDo {
 			} catch (IOException i) {
 				i.printStackTrace();
 			}
-			
 		}
 			
 	}
@@ -110,7 +138,7 @@ public class ToDo {
 		//Creates Event Dispatcher Thread so GUI can run without problems
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				ToDo testToDo = new ToDo();
+				ToDoApp testToDo = new ToDoApp();
 				testToDo.createGUI();
 			}
 		});
