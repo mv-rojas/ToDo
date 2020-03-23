@@ -111,6 +111,11 @@ public class MainToDoApp implements Observer {
 	//updates save file when items are added or deleted
 	@Override
 	public void update(Observable todo, Object arg) {
+
+		if(toDoList.contains(todo)) {
+			toDoList.remove(todo);
+		}
+
 		try {
 
 			FileOutputStream listOut = new FileOutputStream(new File("Saved To-Dos/todos.ser"));
@@ -123,6 +128,7 @@ public class MainToDoApp implements Observer {
 		} catch (IOException i) {
 			i.printStackTrace();
 		}
+
 
 		pan.setMaximumSize(pan.getPreferredSize());
 
