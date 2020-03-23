@@ -43,7 +43,7 @@ public class ToDo extends Observable implements Serializable {
 				parentToDo.removeSubTask(this);
 			}
 			setChanged();
-			notifyObservers();
+			notifyObservers("deleted");
 		}
 
 		public ArrayList<ToDo> getSubTasks() {
@@ -60,6 +60,8 @@ public class ToDo extends Observable implements Serializable {
 			if (parentToDo != null) {
 				parentToDo.setChanged();
 				parentToDo.notifyObservers();
+			} else {
+				notifyObservers();
 			}
 		}
  	}

@@ -35,9 +35,20 @@ public class ToDoComponent extends JPanel {
 		createDeleteButton();
 		createSubToDoButton();
 
+		addSubToDos();
+
 		//for each subtask in todo, add to do component to self
 		
 	}
+
+	private void addSubToDos() {
+
+		for(ToDo sub : toDo.getSubTasks()) {
+			this.add(new ToDoComponent(sub, this));
+		}
+
+	}
+
 
 	private void createSubToDoButton() {
 		
@@ -55,7 +66,7 @@ public class ToDoComponent extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				//Must first create a textfield in which to input the new sub-task
-				JTextField tempTextField = new JTextField(20);
+				JTextField tempTextField = new JTextField(50);
 				GridBagConstraints cTemp = new GridBagConstraints();
 				cTemp.gridx = 1;
 				cTemp.gridy = GridBagConstraints.RELATIVE;

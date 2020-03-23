@@ -112,7 +112,7 @@ public class MainToDoApp implements Observer {
 	@Override
 	public void update(Observable todo, Object arg) {
 
-		if(toDoList.contains(todo)) {
+		if(toDoList.contains(todo) && arg == "deleted") {
 			toDoList.remove(todo);
 		}
 
