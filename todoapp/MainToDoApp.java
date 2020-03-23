@@ -89,15 +89,18 @@ public class MainToDoApp implements Observer {
 		pan.add(textField);
 		pan.add(new JLabel("To-Dos"));
 		topPan.add(pan);
-		//prevents elements from expanding by letting this element expand with the resizing of windows
-		topPan.add(Box.createVerticalGlue());
-
+		
 		// add any to-dos that were saved previously
 		for (ToDo i : toDoList) {
 			ToDoComponent todocomp = new ToDoComponent(i, pan);
-			pan.add(todocomp);	
+			pan.add(todocomp, Component.LEFT_ALIGNMENT);	
 			i.addObserver(this);				
 		}
+		pan.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
+		pan.setMaximumSize(pan.getPreferredSize());
+
+		topPan.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+
 
 		frame.add(topPan);
 		frame.pack();
@@ -120,6 +123,9 @@ public class MainToDoApp implements Observer {
 		} catch (IOException i) {
 			i.printStackTrace();
 		}
+
+		pan.setMaximumSize(pan.getPreferredSize());
+
 	}
 
 	public static void main(String[] args) {
@@ -127,6 +133,39 @@ public class MainToDoApp implements Observer {
 		//Creates Event Dispatcher Thread so GUI can run without problems
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				
+/*
+				JFrame frame = new JFrame();
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+				JPanel mainPanel = new JPanel();
+				mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+				JPanel nestP1 = new JPanel();
+				nestP1.setLayout(new GridBagLayout());
+				GridBagConstraints c = new GridBagConstraints();
+				c.anchor = GridBagConstraints.FIRST_LINE_START;
+				c.weightx = 0;
+				c.weighty = 0;
+
+				nestP1.add(new JButton("dklfj"), c);
+				nestP1.setMaximumSize(nestP1.getPreferredSize());
+
+				mainPanel.add(new JButton("DFD"));
+				mainPanel.add(nestP1);
+				mainPanel.add(new JButton("D"));
+				mainPanel.add(Box.createVerticalGlue());
+
+				frame.add(mainPanel);
+				frame.pack();
+				frame.setVisible(true);
+
+
+*/
+
+
+
+
 				MainToDoApp testToDo = new MainToDoApp();
 				testToDo.createGUI();
 			}					

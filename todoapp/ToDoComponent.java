@@ -19,6 +19,8 @@ public class ToDoComponent extends JPanel {
 		toDo = t;
 		nestedPanel = n;
 		this.setLayout(new GridBagLayout());
+		this.setBorder(BorderFactory.createLineBorder(Color.RED));
+
 
 		JCheckBox checkbox = new JCheckBox(toDo.getText());
 
@@ -46,6 +48,7 @@ public class ToDoComponent extends JPanel {
 		cSub.gridy = 0; 
 		cSub.weightx = 0;
 		cSub.weighty = 0;
+		cSub.anchor = GridBagConstraints.FIRST_LINE_START;
 		this.add(subToDoButton, cSub);
 		
 		subToDoButton.addActionListener(new ActionListener() {
@@ -56,6 +59,7 @@ public class ToDoComponent extends JPanel {
 				GridBagConstraints cTemp = new GridBagConstraints();
 				cTemp.gridx = 1;
 				cTemp.gridy = GridBagConstraints.RELATIVE;
+				cTemp.anchor = GridBagConstraints.FIRST_LINE_START;
 				ToDoComponent.this.add(tempTextField,cTemp);
 
 				ToDoComponent.this.revalidate();
@@ -73,9 +77,11 @@ public class ToDoComponent extends JPanel {
 						cSubToDo.weightx = 0;
 						cSubToDo.weighty = 0;
 						cSubToDo.gridwidth = 3;
+						cSubToDo.anchor = GridBagConstraints.FIRST_LINE_START;
 
 						ToDoComponent.this.add(new ToDoComponent(subTask, ToDoComponent.this), cSubToDo);
 						ToDoComponent.this.remove(tempTextField);
+						ToDoComponent.this.setMaximumSize(ToDoComponent.this.getPreferredSize());
 
 						ToDoComponent.this.revalidate();
 						ToDoComponent.this.repaint();
@@ -97,6 +103,7 @@ public class ToDoComponent extends JPanel {
 		cDelete.gridy = 0;
 		cDelete.weightx = 0;
 		cDelete.weighty = 0;
+		cDelete.anchor = GridBagConstraints.FIRST_LINE_START;
 		this.add(deleteButton, cDelete);
 
 
@@ -106,8 +113,9 @@ public class ToDoComponent extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				toDo.remove();
 
-
 				nestedPanel.remove(ToDoComponent.this);
+				nestedPanel.setMaximumSize(nestedPanel.getPreferredSize());
+
 				nestedPanel.revalidate();
 				nestedPanel.repaint();
 
