@@ -39,10 +39,12 @@ public class ToDo extends Observable implements Serializable {
 		}
 
 		public void remove() {
+			setChanged();
 			if (parentToDo != null) {
 				parentToDo.removeSubTask(this);
-				setChanged();
 				notifyObservers();
+			} else {
+				notifyObservers("deleted");
 			}
 		}
 
@@ -59,7 +61,6 @@ public class ToDo extends Observable implements Serializable {
 			super.setChanged();
 			if (parentToDo != null) {
 				parentToDo.setChanged();
-				parentToDo.notifyObservers();
-			}
+			} 
 		}
  	}

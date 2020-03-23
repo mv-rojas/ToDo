@@ -36,6 +36,9 @@ public class ToDoComponent extends JPanel {
 		createSubToDoButton();
 
 		//for each subtask in todo, add to do component to self
+		for(ToDo s : toDo.getSubTasks()) {
+			addSubTaskComponent(s);
+		}
 		
 	}
 
@@ -76,21 +79,9 @@ public class ToDoComponent extends JPanel {
 						
 						ToDo subTask = new ToDo(tempTextField.getText(), toDo);
 						toDo.addSubTask(tempTextField.getText());
-
-						GridBagConstraints cSubToDo = new GridBagConstraints();
-						cSubToDo.gridx = 1;
-						cSubToDo.gridy = GridBagConstraints.RELATIVE;
-						cSubToDo.weightx = 0;
-						cSubToDo.weighty = 0;
-						cSubToDo.gridwidth = 3;
-						cSubToDo.anchor = GridBagConstraints.FIRST_LINE_START;
-
-						ToDoComponent.this.add(new ToDoComponent(subTask, ToDoComponent.this), cSubToDo);
 						ToDoComponent.this.remove(tempTextField);
-						ToDoComponent.this.setMaximumSize(ToDoComponent.this.getPreferredSize());
+						addSubTaskComponent(subTask);
 
-						ToDoComponent.this.revalidate();
-						ToDoComponent.this.repaint();
 					}
 
 				});
@@ -99,6 +90,22 @@ public class ToDoComponent extends JPanel {
 		});
 	}
 
+	private void addSubTaskComponent(ToDo sub) {
+
+		GridBagConstraints cSubToDo = new GridBagConstraints();
+		cSubToDo.gridx = 1;
+		cSubToDo.gridy = GridBagConstraints.RELATIVE;
+		cSubToDo.weightx = 0;
+		cSubToDo.weighty = 0;
+		cSubToDo.gridwidth = 3;
+		cSubToDo.anchor = GridBagConstraints.FIRST_LINE_START;
+
+		this.add(new ToDoComponent(sub, this), cSubToDo);
+		this.setMaximumSize(this.getPreferredSize());
+
+		this.revalidate();
+		this.repaint();
+	}
 
 	private void createDeleteButton() {
 
