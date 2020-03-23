@@ -55,11 +55,17 @@ public class ToDoComponent extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				//Must first create a textfield in which to input the new sub-task
-				JTextField tempTextField = new JTextField(20);
+				JTextField tempTextField = new JTextField(50);
 				GridBagConstraints cTemp = new GridBagConstraints();
+				
 				cTemp.gridx = 1;
 				cTemp.gridy = GridBagConstraints.RELATIVE;
+				cTemp.weightx = 1;
+				cTemp.weighty = 0;
+				cTemp.gridwidth = 3;
 				cTemp.anchor = GridBagConstraints.FIRST_LINE_START;
+											
+				tempTextField.setMinimumSize(tempTextField.getPreferredSize());
 				ToDoComponent.this.add(tempTextField,cTemp);
 
 				ToDoComponent.this.revalidate();
