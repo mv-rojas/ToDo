@@ -107,6 +107,7 @@ public class ToDoComponent extends JPanel {
 		this.repaint();
 	}
 
+
 	private void createDeleteButton() {
 
 		JButton deleteButton = new JButton("X");
@@ -129,10 +130,29 @@ public class ToDoComponent extends JPanel {
 				nestedPanel.remove(ToDoComponent.this);
 				nestedPanel.setMaximumSize(nestedPanel.getPreferredSize());
 
-				nestedPanel.revalidate();
-				nestedPanel.repaint();
+				revalidate();
+				repaint();
 
 			}				
 		});
+	}
+	
+	//Since ToDoComponents are nested within other ToDoComponents or panels, there needs to be a way to refresh outer panels even if the to-do
+	//component is nested within multiple ToDoComponents
+	@Override
+	public void revalidate() {
+		super.revalidate();
+		if(nestedPanel !=null ) {
+			nestedPanel.revalidate();	
+		}
+		 
+	}
+	
+	@Override
+	public void repaint() {
+		super.repaint();
+		if(nestedPanel !=null ) {
+			nestedPanel.repaint();	
+		}
 	}
 }
