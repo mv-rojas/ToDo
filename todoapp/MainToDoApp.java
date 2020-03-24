@@ -111,7 +111,7 @@ public class MainToDoApp implements Observer {
 	//updates save file when items are added or deleted
 	@Override
 	public void update(Observable todo, Object arg) {
-
+	
 		if(toDoList.contains(todo) && arg == "deleted") {
 			toDoList.remove(todo);
 		}
@@ -139,39 +139,6 @@ public class MainToDoApp implements Observer {
 		//Creates Event Dispatcher Thread so GUI can run without problems
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				
-/*
-				JFrame frame = new JFrame();
-				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-				JPanel mainPanel = new JPanel();
-				mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
-				JPanel nestP1 = new JPanel();
-				nestP1.setLayout(new GridBagLayout());
-				GridBagConstraints c = new GridBagConstraints();
-				c.anchor = GridBagConstraints.FIRST_LINE_START;
-				c.weightx = 0;
-				c.weighty = 0;
-
-				nestP1.add(new JButton("dklfj"), c);
-				nestP1.setMaximumSize(nestP1.getPreferredSize());
-
-				mainPanel.add(new JButton("DFD"));
-				mainPanel.add(nestP1);
-				mainPanel.add(new JButton("D"));
-				mainPanel.add(Box.createVerticalGlue());
-
-				frame.add(mainPanel);
-				frame.pack();
-				frame.setVisible(true);
-
-
-*/
-
-
-
-
 				MainToDoApp testToDo = new MainToDoApp();
 				testToDo.createGUI();
 			}					
