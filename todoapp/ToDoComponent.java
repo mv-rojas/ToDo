@@ -35,17 +35,28 @@ public class ToDoComponent extends JPanel {
 		createDeleteButton();
 		createSubToDoButton();
 
-		addSubToDos();
+		for(ToDo sub : toDo.getSubTasks()) {
+			addSubToDoComponent(new ToDoComponent(sub, this));
+		}
 
 		//for each subtask in todo, add to do component to self
 		
 	}
 
-	private void addSubToDos() {
+	private void addSubToDoComponent(ToDoComponent subComp) {
+		
+		GridBagConstraints cSubToDo = new GridBagConstraints();
+		cSubToDo.gridx = 1;
+		cSubToDo.gridy = GridBagConstraints.RELATIVE;
+		cSubToDo.weightx = 0;
+		cSubToDo.weighty = 0;
+		cSubToDo.gridwidth = 3;
+		cSubToDo.anchor = GridBagConstraints.FIRST_LINE_START;
 
-		for(ToDo sub : toDo.getSubTasks()) {
-			this.add(new ToDoComponent(sub, this));
-		}
+		this.add(subComp, cSubToDo);
+		
+		revalidate();
+		repaint();
 
 	}
 
@@ -66,11 +77,13 @@ public class ToDoComponent extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				//Must first create a textfield in which to input the new sub-task
-				JTextField tempTextField = new JTextField(50);
+				JTextField tempTextField = new JTextField(20);
 				GridBagConstraints cTemp = new GridBagConstraints();
 				cTemp.gridx = 1;
 				cTemp.gridy = GridBagConstraints.RELATIVE;
 				cTemp.anchor = GridBagConstraints.FIRST_LINE_START;
+				tempTextField.setMinimumSize(tempTextField.getPreferredSize());
+								
 				ToDoComponent.this.add(tempTextField,cTemp);
 
 				ToDoComponent.this.revalidate();
@@ -82,17 +95,9 @@ public class ToDoComponent extends JPanel {
 						ToDo subTask = new ToDo(tempTextField.getText(), toDo);
 						toDo.addSubTask(tempTextField.getText());
 
-						GridBagConstraints cSubToDo = new GridBagConstraints();
-						cSubToDo.gridx = 1;
-						cSubToDo.gridy = GridBagConstraints.RELATIVE;
-						cSubToDo.weightx = 0;
-						cSubToDo.weighty = 0;
-						cSubToDo.gridwidth = 3;
-						cSubToDo.anchor = GridBagConstraints.FIRST_LINE_START;
-
-						ToDoComponent.this.add(new ToDoComponent(subTask, ToDoComponent.this), cSubToDo);
 						ToDoComponent.this.remove(tempTextField);
-						ToDoComponent.this.setMaximumSize(ToDoComponent.this.getPreferredSize());
+						ToDoComponent.this.addSubToDoComponent(new ToDoComponent(subTask,ToDoComponent.this));
+						ToDoComponent.this.setMinimumSize(ToDoComponent.this.getPreferredSize());
 
 						ToDoComponent.this.revalidate();
 						ToDoComponent.this.repaint();
@@ -120,8 +125,8 @@ public class ToDoComponent extends JPanel {
 
 		//removes to-do from general list and to-do GUI component
 		deleteButton.addActionListener( new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
+				
 				toDo.remove();
 
 				nestedPanel.remove(ToDoComponent.this);
@@ -133,4 +138,21 @@ public class ToDoComponent extends JPanel {
 			}				
 		});
 	}
+	
+	@Override
+	public void revalidate() {
+		super.revalidate();
+		if(nestedPanel!=null) {
+			nestedPanel.revalidate();
+		}
+	}
+	
+	public void repaint() {
+		super.repaint();
+		if(nestedPanel!=null) {
+			nestedPanel.repaint();
+		}
+	}
+	
+	
 }

@@ -33,7 +33,7 @@ public class MainToDoApp implements Observer {
 	}
 
 	private void loadSaveFile() {
-
+		
 		//Loads any saved to-dos lists, otherwise creates new list
 		if (new File("Saved To-Dos/todos.ser").isFile()) {
 			try {
@@ -168,6 +168,7 @@ public class MainToDoApp implements Observer {
 
 
 */
+
 
 
 

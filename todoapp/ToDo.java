@@ -25,7 +25,7 @@ public class ToDo extends Observable implements Serializable {
 		}
 
 		public void addSubTask(String text) {
-			subtasks.add(new ToDo(text, new ToDo(" TEst")));
+			subtasks.add(new ToDo(text, this));
 			setChanged();
 			notifyObservers();
 		}
@@ -33,15 +33,15 @@ public class ToDo extends Observable implements Serializable {
 		public void removeSubTask(ToDo toDo) {
 			if(subtasks.contains(toDo)) {
 				subtasks.remove(toDo);
-				setChanged();
-				notifyObservers();
 			} 
+			setChanged();
+			notifyObservers();
 		}
 
 		public void remove() {
 			if (parentToDo != null) {
 				parentToDo.removeSubTask(this);
-			}
+			} 
 			setChanged();
 			notifyObservers("deleted");
 		}
@@ -59,9 +59,14 @@ public class ToDo extends Observable implements Serializable {
 			super.setChanged();
 			if (parentToDo != null) {
 				parentToDo.setChanged();
-				parentToDo.notifyObservers();
-			} else {
-				notifyObservers();
+			} 
+		}
+		
+		@Override
+		public void notifyObservers(Object arg) {
+			super.notifyObservers(arg);
+			if(parentToDo != null) {
+				parentToDo.notifyObservers(arg);
 			}
 		}
  	}
