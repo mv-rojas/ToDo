@@ -24,10 +24,10 @@ public class ToDo extends Observable implements Serializable {
 
 		}
 
-		public void addSubTask(String text) {
-			subtasks.add(new ToDo(text, new ToDo(" TEst")));
+		public void addSubTask(ToDo todo) {
+			subtasks.add(todo);
 			setChanged();
-			notifyObservers();
+			notifyObservers(null);
 		}
 
 		public void removeSubTask(ToDo toDo) {
@@ -62,5 +62,13 @@ public class ToDo extends Observable implements Serializable {
 			if (parentToDo != null) {
 				parentToDo.setChanged();
 			} 
+		}
+		
+		@Override
+		public void notifyObservers(Object arg) {
+			super.notifyObservers(arg);
+			if(parentToDo !=null) {
+				parentToDo.notifyObservers(arg);
+			}
 		}
  	}

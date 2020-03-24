@@ -78,7 +78,7 @@ public class ToDoComponent extends JPanel {
 					public void actionPerformed(ActionEvent e)	{
 						
 						ToDo subTask = new ToDo(tempTextField.getText(), toDo);
-						toDo.addSubTask(tempTextField.getText());
+						toDo.addSubTask(subTask);
 						ToDoComponent.this.remove(tempTextField);
 						addSubTaskComponent(subTask);
 
@@ -101,7 +101,7 @@ public class ToDoComponent extends JPanel {
 		cSubToDo.anchor = GridBagConstraints.FIRST_LINE_START;
 
 		this.add(new ToDoComponent(sub, this), cSubToDo);
-		this.setMaximumSize(this.getPreferredSize());
+		//this.setMinimumSize(this.getPreferredSize());
 
 		this.revalidate();
 		this.repaint();

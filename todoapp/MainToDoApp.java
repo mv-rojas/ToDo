@@ -66,7 +66,9 @@ public class MainToDoApp implements Observer {
 		//When someone presses enter in the textfield, create new to-do 
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				toDoList.add(new ToDo(textField.getText()));
+				ToDo newToDo = new ToDo(textField.getText());
+				toDoList.add(newToDo);
+				newToDo.addObserver(MainToDoApp.this);
 				pan.add(new ToDoComponent(toDoList.get(toDoList.size()-1),pan));
 				textField.setText("");
 
@@ -75,7 +77,7 @@ public class MainToDoApp implements Observer {
 				pan.repaint();
 		
 				//Saves list of to-dos for later use	
-				update(new ToDo(textField.getText()), "nothing");
+				update(new ToDo(textField.getText()), null);
 			}
 		});
 
