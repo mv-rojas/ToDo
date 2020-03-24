@@ -111,7 +111,7 @@ public class MainToDoApp implements Observer {
 	//updates save file when items are added or deleted
 	@Override
 	public void update(Observable todo, Object arg) {
-
+	
 		if(toDoList.contains(todo) && arg == "deleted") {
 			toDoList.remove(todo);
 		}
@@ -168,10 +168,6 @@ public class MainToDoApp implements Observer {
 
 
 */
-
-
-
-
 
 				MainToDoApp testToDo = new MainToDoApp();
 				testToDo.createGUI();

@@ -40,6 +40,9 @@ public class ToDoComponent extends JPanel {
 		}
 
 		//for each subtask in todo, add to do component to self
+		for(ToDo s : toDo.getSubTasks()) {
+			addSubTaskComponent(s);
+		}
 		
 	}
 
@@ -79,11 +82,15 @@ public class ToDoComponent extends JPanel {
 				//Must first create a textfield in which to input the new sub-task
 				JTextField tempTextField = new JTextField(20);
 				GridBagConstraints cTemp = new GridBagConstraints();
+				
 				cTemp.gridx = 1;
 				cTemp.gridy = GridBagConstraints.RELATIVE;
+				cTemp.weightx = 1;
+				cTemp.weighty = 0;
+				cTemp.gridwidth = 3;
 				cTemp.anchor = GridBagConstraints.FIRST_LINE_START;
+				
 				tempTextField.setMinimumSize(tempTextField.getPreferredSize());
-								
 				ToDoComponent.this.add(tempTextField,cTemp);
 
 				ToDoComponent.this.revalidate();
@@ -99,14 +106,29 @@ public class ToDoComponent extends JPanel {
 						ToDoComponent.this.addSubToDoComponent(new ToDoComponent(subTask,ToDoComponent.this));
 						ToDoComponent.this.setMinimumSize(ToDoComponent.this.getPreferredSize());
 
-						ToDoComponent.this.revalidate();
-						ToDoComponent.this.repaint();
 					}
 
 				});
 			}
 
 		});
+	}
+
+	private void addSubTaskComponent(ToDo sub) {
+
+		GridBagConstraints cSubToDo = new GridBagConstraints();
+		cSubToDo.gridx = 1;
+		cSubToDo.gridy = GridBagConstraints.RELATIVE;
+		cSubToDo.weightx = 0;
+		cSubToDo.weighty = 0;
+		cSubToDo.gridwidth = 3;
+		cSubToDo.anchor = GridBagConstraints.FIRST_LINE_START;
+
+		this.add(new ToDoComponent(sub, this), cSubToDo);
+		this.setMaximumSize(this.getPreferredSize());
+
+		this.revalidate();
+		this.repaint();
 	}
 
 
@@ -132,27 +154,29 @@ public class ToDoComponent extends JPanel {
 				nestedPanel.remove(ToDoComponent.this);
 				nestedPanel.setMaximumSize(nestedPanel.getPreferredSize());
 
-				nestedPanel.revalidate();
-				nestedPanel.repaint();
+				revalidate();
+				repaint();
 
 			}				
 		});
 	}
 	
+	//Since ToDoComponents are nested within other ToDoComponents or panels, there needs to be a way to refresh outer panels even if the to-do
+	//component is nested within multiple ToDoComponents
 	@Override
 	public void revalidate() {
 		super.revalidate();
-		if(nestedPanel!=null) {
-			nestedPanel.revalidate();
+		if(nestedPanel !=null ) {
+			nestedPanel.revalidate();	
 		}
+		 
 	}
 	
+	@Override
 	public void repaint() {
 		super.repaint();
-		if(nestedPanel!=null) {
-			nestedPanel.repaint();
+		if(nestedPanel !=null ) {
+			nestedPanel.repaint();	
 		}
 	}
-	
-	
 }
