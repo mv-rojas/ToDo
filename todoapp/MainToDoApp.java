@@ -60,8 +60,6 @@ public class MainToDoApp implements Observer {
 
 		frame = new JFrame("To-Do App");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		textField.setMaximumSize(new Dimension(300,50));
 		
 		//When someone presses enter in the textfield, create new to-do 
 		textField.addActionListener(new ActionListener() {
@@ -83,13 +81,14 @@ public class MainToDoApp implements Observer {
 
 		JLabel title = new JLabel("To-Dos");
 
-		//topPan allows a second panel with the to-do components to be added to while allowing a strechable buffer space beneath the components
+		//topPan allows a second panel with the to-do components to be added to while allowing a stretchable buffer space beneath the components
 		JPanel topPan = new JPanel();
 		topPan.setLayout(new BoxLayout(topPan, BoxLayout.Y_AXIS));
 		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
 
 		pan.add(textField);
 		pan.add(new JLabel("To-Dos"));
+		pan.setAlignmentX(Component.LEFT_ALIGNMENT);
 		topPan.add(pan);
 		
 		// add any to-dos that were saved previously
@@ -99,7 +98,7 @@ public class MainToDoApp implements Observer {
 			i.addObserver(this);				
 		}
 		pan.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-		pan.setMinimumSize(pan.getPreferredSize());
+		pan.setMaximumSize(pan.getPreferredSize());
 		
 		topPan.add(Box.createVerticalGlue());
 		topPan.setBorder(BorderFactory.createLineBorder(Color.GREEN));
