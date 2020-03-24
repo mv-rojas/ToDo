@@ -99,8 +99,9 @@ public class MainToDoApp implements Observer {
 			i.addObserver(this);				
 		}
 		pan.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-		pan.setMaximumSize(pan.getPreferredSize());
-
+		pan.setMinimumSize(pan.getPreferredSize());
+		
+		topPan.add(Box.createVerticalGlue());
 		topPan.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
 
