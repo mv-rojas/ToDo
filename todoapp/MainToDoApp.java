@@ -67,7 +67,9 @@ public class MainToDoApp implements Observer {
 				ToDo newToDo = new ToDo(textField.getText());
 				toDoList.add(newToDo);
 				newToDo.addObserver(MainToDoApp.this);
-				pan.add(new ToDoComponent(toDoList.get(toDoList.size()-1),pan));
+				ToDoComponent tdc = new ToDoComponent(toDoList.get(toDoList.size()-1),pan);
+				tdc.setAlignmentX(Component.LEFT_ALIGNMENT);
+				pan.add(tdc);
 				textField.setText("");
 
 				//ensures new checkbox component is visible
@@ -96,8 +98,7 @@ public class MainToDoApp implements Observer {
 		for (ToDo i : toDoList) {
 			ToDoComponent todocomp = new ToDoComponent(i, pan);
 			pan.add(todocomp);
-			todocomp.setAlignmentX(Box.LEFT_ALIGNMENT);
-			todocomp.setMaximumSize(todocomp.getPreferredSize());
+			todocomp.setAlignmentX(Component.LEFT_ALIGNMENT);
 			i.addObserver(this);				
 		}
 		pan.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
