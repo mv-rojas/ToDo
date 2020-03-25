@@ -11,6 +11,7 @@ public class ToDoComponent extends JPanel {
 	private ToDo toDo;
 	private JPanel nestedPanel; 
 	private JPanel textAndButtonPanel;
+	private JPanel tempSubTaskPanel;
 	//constructor takes in the to-do text and the panel that the to-do is part of (so that it can be deleted from said panel)
 	ToDoComponent(ToDo t, JPanel n) {
 
@@ -18,20 +19,25 @@ public class ToDoComponent extends JPanel {
 		nestedPanel = n;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(BorderFactory.createLineBorder(Color.RED));
-
-
+		
 		JCheckBox checkbox = new JCheckBox(toDo.getText());		
 		//checkbox.setMinimumSize(new Dimension(100,10));
 
 		textAndButtonPanel = new JPanel();
 		textAndButtonPanel.setLayout(new BoxLayout(textAndButtonPanel, BoxLayout.X_AXIS));
+		textAndButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		textAndButtonPanel.add(checkbox);
+		textAndButtonPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
+		tempSubTaskPanel = new JPanel();
+		tempSubTaskPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
 		this.add(textAndButtonPanel);
+		this.add(tempSubTaskPanel);
 		
 		this.createSubToDoButton();
 		createDeleteButton();
-		
+	
 		revalidate();
 		repaint();
 
@@ -45,7 +51,6 @@ public class ToDoComponent extends JPanel {
 	private void createSubToDoButton() {
 		
 		JButton subToDoButton = new JButton("Add Sub-Task");
-
 		textAndButtonPanel.add(subToDoButton);
 		
 		subToDoButton.addActionListener(new ActionListener() {
@@ -55,7 +60,7 @@ public class ToDoComponent extends JPanel {
 				JTextField tempTextField = new JTextField(50);
 
 				tempTextField.setMinimumSize(tempTextField.getPreferredSize());
-				ToDoComponent.this.add(tempTextField);
+				tempSubTaskPanel.add(tempTextField);
 
 				ToDoComponent.this.setMinimumSize(ToDoComponent.this.getPreferredSize());
 				ToDoComponent.this.revalidate();
@@ -66,7 +71,7 @@ public class ToDoComponent extends JPanel {
 						
 						ToDo subTask = new ToDo(tempTextField.getText(), toDo);
 						toDo.addSubTask(subTask);
-						ToDoComponent.this.remove(tempTextField);
+						tempSubTaskPanel.remove(tempTextField);
 						addSubTaskComponent(subTask);
 
 					}
@@ -104,6 +109,8 @@ public class ToDoComponent extends JPanel {
 		subPanel.setLayout(new BoxLayout(subPanel, BoxLayout.X_AXIS));
 		subPanel.add(Box.createRigidArea(new Dimension(15, 10)));
 		subPanel.add(new ToDoComponent(sub, this));
+		subPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
+		subPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		this.add(subPanel);
 		this.setMinimumSize(this.getPreferredSize());
 
