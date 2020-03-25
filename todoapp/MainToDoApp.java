@@ -134,7 +134,6 @@ public class MainToDoApp implements Observer {
 			i.printStackTrace();
 		}
 
-
 		pan.setMaximumSize(pan.getPreferredSize());
 
 	}

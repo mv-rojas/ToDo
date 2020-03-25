@@ -6,18 +6,19 @@ import java.util.*;
 import javax.swing.*;
 import java.io.*;
 
+
 //This class creates a component that displays individual to-dos, allows their modification and addition sub-to-do components
 public class ToDoComponent extends JPanel {
 	private ToDo toDo;
 	private JPanel nestedPanel; 
 	private JPanel textAndButtonPanel;
-	private JPanel tempSubTaskPanel;
+
 	//constructor takes in the to-do text and the panel that the to-do is part of (so that it can be deleted from said panel)
 	ToDoComponent(ToDo t, JPanel n) {
 
 		toDo = t;
 		nestedPanel = n;
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createLineBorder(Color.RED));
 		
 		JCheckBox checkbox = new JCheckBox(toDo.getText());		
@@ -28,15 +29,31 @@ public class ToDoComponent extends JPanel {
 		textAndButtonPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		textAndButtonPanel.add(checkbox);
 		textAndButtonPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		textAndButtonPanel.setPreferredSize(new Dimension(500-checkbox.getWidth(),30));
+		textAndButtonPanel.setMinimumSize(textAndButtonPanel.getPreferredSize());
 		
-		tempSubTaskPanel = new JPanel();
-		tempSubTaskPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-		this.add(textAndButtonPanel);
-		this.add(tempSubTaskPanel);
+		Component glue = Box.createHorizontalGlue();
+		//glue.setPreferredSize(new Dimension(300-checkbox.getWidth(),checkbox.getHeight()));
 		
-		this.createSubToDoButton();
+		textAndButtonPanel.add(Box.createHorizontalGlue());
+		/*
+		Dimension minSize = new Dimension(0,0);
+		Dimension prefSize = new Dimension(500-checkbox.getWidth(),checkbox.getHeight());
+		Dimension maxSize = new Dimension(Short.MAX_VALUE, checkbox.getHeight());
+		textAndButtonPanel.add(new Box.Filler(prefSize, prefSize, maxSize));
+		*/
+		
+		createSubToDoButton();
 		createDeleteButton();
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 1;
+		c.gridwidth = 5;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+
+		this.add(textAndButtonPanel, c);
 	
 		revalidate();
 		repaint();
@@ -45,7 +62,6 @@ public class ToDoComponent extends JPanel {
 		for(ToDo s : toDo.getSubTasks()) {
 			addSubTaskComponent(s);
 		}
-		
 	}
 
 	private void createSubToDoButton() {
@@ -60,7 +76,8 @@ public class ToDoComponent extends JPanel {
 				JTextField tempTextField = new JTextField(50);
 
 				tempTextField.setMinimumSize(tempTextField.getPreferredSize());
-				tempSubTaskPanel.add(tempTextField);
+				tempTextField.setAlignmentX(Component.LEFT_ALIGNMENT);
+				ToDoComponent.this.add(tempTextField,1);
 
 				ToDoComponent.this.setMinimumSize(ToDoComponent.this.getPreferredSize());
 				ToDoComponent.this.revalidate();
@@ -71,7 +88,7 @@ public class ToDoComponent extends JPanel {
 						
 						ToDo subTask = new ToDo(tempTextField.getText(), toDo);
 						toDo.addSubTask(subTask);
-						tempSubTaskPanel.remove(tempTextField);
+						ToDoComponent.this.remove(tempTextField);
 						addSubTaskComponent(subTask);
 
 					}
@@ -105,31 +122,33 @@ public class ToDoComponent extends JPanel {
 	
 	private void addSubTaskComponent(ToDo sub) {
 	
-		JPanel subPanel = new JPanel();
-		subPanel.setLayout(new BoxLayout(subPanel, BoxLayout.X_AXIS));
-		subPanel.add(Box.createRigidArea(new Dimension(15, 10)));
-		subPanel.add(new ToDoComponent(sub, this));
-		subPanel.setBorder(BorderFactory.createLineBorder(Color.GREEN));
-		subPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-		this.add(subPanel);
-		this.setMinimumSize(this.getPreferredSize());
+		ToDoComponent subComp = new ToDoComponent(sub,this);
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 1;
+		c.gridy = GridBagConstraints.RELATIVE;
+		c.insets = new Insets(0,25,0,0);
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+		c.weightx = 1	;
 
+		this.add(subComp,c);
+		this.setMinimumSize(this.getPreferredSize());
+		
 		this.revalidate();
 		this.repaint();
 	}
 
-	
+
 	//Since ToDoComponents are nested within other ToDoComponents or panels, there needs to be a way to refresh outer panels even if the to-do
 	//component is nested within multiple ToDoComponents
+	
 	@Override
 	public void revalidate() {
 		super.revalidate();
 		if(nestedPanel !=null ) {
 			nestedPanel.revalidate();	
-		}
-		 
+		}		 
 	}
-	
+
 	@Override
 	public void repaint() {
 		super.repaint();
