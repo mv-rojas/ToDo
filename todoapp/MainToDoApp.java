@@ -86,6 +86,7 @@ public class MainToDoApp implements Observer {
 		topPan.setLayout(new BoxLayout(topPan, BoxLayout.Y_AXIS));
 		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
 
+		textField.setMaximumSize(textField.getPreferredSize());
 		pan.add(textField);
 		pan.add(new JLabel("To-Dos"));
 		pan.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -94,11 +95,12 @@ public class MainToDoApp implements Observer {
 		// add any to-dos that were saved previously
 		for (ToDo i : toDoList) {
 			ToDoComponent todocomp = new ToDoComponent(i, pan);
-			pan.add(todocomp, Component.LEFT_ALIGNMENT);	
+			pan.add(todocomp);
+			todocomp.setAlignmentX(Box.LEFT_ALIGNMENT);
+			todocomp.setMaximumSize(todocomp.getPreferredSize());
 			i.addObserver(this);				
 		}
 		pan.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-		pan.setMaximumSize(pan.getPreferredSize());
 		
 		topPan.add(Box.createVerticalGlue());
 		topPan.setBorder(BorderFactory.createLineBorder(Color.GREEN));

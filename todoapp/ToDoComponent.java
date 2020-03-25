@@ -101,7 +101,7 @@ public class ToDoComponent extends JPanel {
 		cSubToDo.anchor = GridBagConstraints.FIRST_LINE_START;
 
 		this.add(new ToDoComponent(sub, this), cSubToDo);
-		//this.setMinimumSize(this.getPreferredSize());
+		this.setMaximumSize(this.getPreferredSize());
 
 		this.revalidate();
 		this.repaint();
@@ -115,7 +115,7 @@ public class ToDoComponent extends JPanel {
 		GridBagConstraints cDelete = new GridBagConstraints();
 		cDelete.gridx = 3;
 		cDelete.gridy = 0;
-		cDelete.weightx = 0;
+		cDelete.weightx = 1;
 		cDelete.weighty = 0;
 		cDelete.anchor = GridBagConstraints.FIRST_LINE_START;
 		this.add(deleteButton, cDelete);
