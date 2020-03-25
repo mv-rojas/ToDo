@@ -211,12 +211,23 @@ public class ToDoComponent extends JPanel {
 		revalidate();
 		repaint();
 
+		addSubToDos();
+
 		//for each subtask in todo, add to do component to self
 		for(ToDo s : toDo.getSubTasks()) {
 			addSubTaskComponent(s);
 		}
 		
 	}
+
+	private void addSubToDos() {
+
+		for(ToDo sub : toDo.getSubTasks()) {
+			this.add(new ToDoComponent(sub, this));
+		}
+
+	}
+
 
 	private void createSubToDoButton() {
 		
