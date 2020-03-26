@@ -61,15 +61,27 @@ public class MainToDoApp implements Observer {
 		frame = new JFrame("To-Do App");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
+		
+		textField.setMaximumSize(textField.getPreferredSize());
+		textField.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
+		pan.add(textField);
+		pan.add(new JLabel("To-Dos"));
+		pan.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 		//When someone presses enter in the textfield, create new to-do 
 		textField.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				ToDo newToDo = new ToDo(textField.getText());
 				toDoList.add(newToDo);
 				newToDo.addObserver(MainToDoApp.this);
+				
 				ToDoComponent tdc = new ToDoComponent(toDoList.get(toDoList.size()-1),pan);
 				tdc.setAlignmentX(Component.LEFT_ALIGNMENT);
-				pan.add(tdc);
+
+				pan.add(tdc,2);
 				textField.setText("");
 
 				//ensures new checkbox component is visible
@@ -83,31 +95,19 @@ public class MainToDoApp implements Observer {
 
 		JLabel title = new JLabel("To-Dos");
 
-		//topPan allows a second panel with the to-do components to be added to while allowing a stretchable buffer space beneath the components
-		JPanel topPan = new JPanel();
-		topPan.setLayout(new BoxLayout(topPan, BoxLayout.Y_AXIS));
-		pan.setLayout(new BoxLayout(pan, BoxLayout.Y_AXIS));
-
-		textField.setMaximumSize(textField.getPreferredSize());
-		pan.add(textField);
-		pan.add(new JLabel("To-Dos"));
-		pan.setAlignmentX(Component.LEFT_ALIGNMENT);
-		topPan.add(pan);
 		
 		// add any to-dos that were saved previously
 		for (ToDo i : toDoList) {
 			ToDoComponent todocomp = new ToDoComponent(i, pan);
-			pan.add(todocomp);
+			pan.add(todocomp,2);
 			todocomp.setAlignmentX(Component.LEFT_ALIGNMENT);
+			todocomp.setMaximumSize(todocomp.getPreferredSize());
 			i.addObserver(this);				
 		}
-		pan.setBorder(BorderFactory.createLineBorder(Color.ORANGE));
-		pan.setMaximumSize(pan.getPreferredSize());
-		topPan.add(Box.createVerticalGlue());
-		topPan.setBorder(BorderFactory.createLineBorder(Color.GREEN));
 
+		pan.add(Box.createVerticalGlue());
 
-		frame.add(topPan);
+		frame.add(pan);
 		frame.pack();
 		frame.setVisible(true);
 
